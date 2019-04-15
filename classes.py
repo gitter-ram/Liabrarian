@@ -23,3 +23,22 @@ class Book:
     self.don = donated
   def getName(self):
     return(self.name)
+  def getNumIssues(self):
+    return(self.max - qty)
+  #All the getters and setters
+class Account:
+  uname = str()
+  pswd = str()
+  priv = int()
+  doj = int()
+  #getters and setters
+  def __init__(self, nm, ps, privilage):
+    self.uname, self.ps, self.priv = nm, ps, privilage
+  
+  class BorrowerAccount(Account):
+    priv = 0
+    mail_id = str()
+    dues = dict() #key : int(Book.acc), value : int(YYYYMMDD)
+    fine = 0
+    dor = dict() #key : int(Book.acc), value : int(YYYYMMDD)
+    
