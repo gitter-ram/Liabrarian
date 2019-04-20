@@ -20,7 +20,6 @@ def encryptFile(file, passwd):
         c = (~c) ^ (0xAA) #Encryption routine
         c = chr(c)
         ofh.write(c)
-    ofh.write(passwd)
   except (Exception):
     return(-2) #Errors during file io
   finally:
