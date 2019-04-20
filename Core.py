@@ -1,6 +1,33 @@
 import os.*
-#Some global dynamic constants:
+#GUI Specific imports
+from tkinter import messagebox
+import tkinter as tk
+#Gui Specific, custom dialogs
+ENTRY_DIALOG_INPUT = ""
+class EntryDialog:
+  def __init__(self, parent, msg):
+    self.top = tk.Toplevel(parent)
+    top = self.top
+    
+    tk.Label(top, text=msg).pack()
+    EntryField = tk.Entry(top)
+    EntryField.pack()
+    tk.Button(top, text="OK", command=lambda(*ignore):evn_buttonPreseed()).pack()
+  
+  def exportInput(self)
+    global ENTRY_DIALOG_INPUT
+    ENTRY_DIALOG_INPUT = self.EntryField.get()
+    
+  def evn_buttonPressed():
+    self.exportInput()
+    self.top.destroy()
+    
+#Some global dynamic constants: (CORE)
 SYSTEM_TYPE = (os.uname())[0]
+
+#Some Golobal variables shared between GUI Widgets and Core
+CURR_FILE_SELECTION = [] #A list of files currently selected by the user
+
 def encryptFile(file, passwd):
   '''A basic complementary file encryption.'''
   try:
@@ -80,4 +107,37 @@ def decryptFile(file, passwd, alm)
     if fh != None:
       fh.close()
   return(0) #Success
-  
+
+def evn_encryptButtonPressed():
+  #The user has pressed the Encrypt button, start encryption.
+  global CURR_FILE_SELECTION
+  if (len(CURR_FILE_SELECTION) == 0)
+    messagebox.showerror("Error", "No file Selected for encryption/decryption.")
+  #Fetch the password for encryption or decryption:
+  #Show the password input dialog:
+  pass_dialog = EntryDialog(root, "Enter the Password:")
+  root.wait_window(pass_dialog.top)
+  #fetch the password:
+  global ENTRY_DIALOG_INPUT
+  global ALMANAC_LOCATION
+  psswd = ENTRY_DIALOG_INPUT
+  for i in CURR_FILE_SELECTION:
+    if(i.endswith(".eny")):
+      ret =decryptFile(os.getcwd() + CURR_FILE_SELECTION, psswd, ALMANAC_LOCATION)
+      #Error Processing:
+      if ret != 0
+        #Delete any files generated
+        if (os.access(i[0:-4], F_OK)):
+          os.remove(i[0:-4])
+        #Process the return code:
+        if (ret == -1):
+          error_str = "The File, " + i + " is unreadable. (No read privialge)"
+        if (ret == -2):
+          error_str = "Errors during reading or writing files while working with " + i
+        if (ret == -3):
+          error_str = "Files can only be decrypted on the machine at which they were encrypted."
+        if (ret == -4):
+          error_str = "Password for the file, " + i + " is wrong. Try Again."
+        messagebox.showerror("Error", error_str)
+    else: #File has to be encrypted
+      #Code for ordering a file encryption follows
