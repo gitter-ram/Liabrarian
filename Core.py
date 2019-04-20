@@ -15,4 +15,16 @@ def encryptFile(file):
     ofh = open((file + ".eny"), "w")
     buff = 10 #10 bytes per read/write cycle
     while (a = fh.read(buff)) != "":
-      
+      for j in a:
+        c = ord(j)
+        c = (~c) ^ (0xAA) #Encryption routine
+        c = chr(c)
+        ofh.write(c)
+  except (Exception):
+    return(-2) #Errors during file io
+  finally:
+    if (ofh != None):
+      ofh.close()
+    if(fh != None):
+      fh.close()
+  return(0)
