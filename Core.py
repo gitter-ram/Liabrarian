@@ -1,7 +1,7 @@
 import os.*
 #Some global dynamic constants:
 SYSTEM_TYPE = (os.uname())[0]
-def encryptFile(file):
+def encryptFile(file, passwd):
   '''A basic complementary file encryption.'''
   try:
     if not (os.access((os.getcwd() + file), os.R_OK)):
@@ -20,6 +20,7 @@ def encryptFile(file):
         c = (~c) ^ (0xAA) #Encryption routine
         c = chr(c)
         ofh.write(c)
+    ofh.write(passwd)
   except (Exception):
     return(-2) #Errors during file io
   finally:
