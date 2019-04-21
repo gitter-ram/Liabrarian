@@ -1,7 +1,9 @@
 import os.*
+
 #GUI Specific imports
 from tkinter import messagebox
 import tkinter as tk
+
 #Gui Specific, custom dialogs
 ENTRY_DIALOG_INPUT = ""
 class EntryDialog:
@@ -22,11 +24,36 @@ class EntryDialog:
     self.exportInput()
     self.top.destroy()
     
+class PropertiesDialog:
+  def __init__(self, parent, attributes, editmode, *tup_ControlsReq):
+    self.root = parent
+    self.top = tk.Toplevel(parent)
+    top = self.top
+    top.pack()
+    
+    if not editmode:
+      j = 0
+      for i in attributes:
+        j += 1
+        tk.Label(top, text=i, anchor=tk.W).grid(row=j, column=0, sticky=tk.W)
+        tk.Label(top, text=" : ").grid(row=j, column=1)
+        tk.Label(top, text=attributes[i]).grid(row=j, column=2)
+      btn_OK = tk.Button(top, text="OK", command=lambda(*ignore):evn_BTNPressed_OK)
+      btn_OK.grid(row=(j + 1), column=1)
+    else:
+      #The properties need to be edited
+      
+    
+  def evn_BTNPressed_OK(self):
+    self.top.destroy()
+    
 #Some global dynamic constants: (CORE)
 SYSTEM_TYPE = (os.uname())[0]
 ALMANAC_LOCATION = ".alm"
+
 #Some Golobal variables shared between GUI Widgets and Core
 CURR_FILE_SELECTION = [] #A list of files currently selected by the user
+ENTRY_DIALOG_INPUT = "" #The input given by the user in the last input dialog
 
 def encryptFile(file):
   '''A basic complementary file encryption.'''
