@@ -5,7 +5,7 @@ from tkinter import messagebox
 import tkinter as tk
 
 #Gui Specific, custom dialogs
-ENTRY_DIALOG_INPUT = ""
+ENTRY_DIALOG_INPUT = []
 class EntryDialog:
   def __init__(self, parent, msg):
     self.top = tk.Toplevel(parent)
@@ -14,18 +14,18 @@ class EntryDialog:
     tk.Label(top, text=msg).pack()
     EntryField = tk.Entry(top)
     EntryField.pack()
-    tk.Button(top, text="OK", command=lambda(*ignore):evn_buttonPreseed()).pack()
+    tk.Button(top, text="OK", command=evn_buttonPreseed).pack()
   
   def exportInput(self)
     global ENTRY_DIALOG_INPUT
-    ENTRY_DIALOG_INPUT = self.EntryField.get()
+    ENTRY_DIALOG_INPUT.append(self.EntryField.get())
     
   def evn_buttonPressed():
     self.exportInput()
     self.top.destroy()
     
 class PropertiesDialog:
-  def __init__(self, parent, attributes, editmode, *tup_ControlsReq):
+  def __init__(self, parent, attributes, editmode, tup_ControlsReq, tup_commands):
     self.root = parent
     self.top = tk.Toplevel(parent)
     top = self.top
@@ -38,12 +38,38 @@ class PropertiesDialog:
         tk.Label(top, text=i, anchor=tk.W).grid(row=j, column=0, sticky=tk.W)
         tk.Label(top, text=" : ").grid(row=j, column=1)
         tk.Label(top, text=attributes[i]).grid(row=j, column=2)
-      btn_OK = tk.Button(top, text="OK", command=lambda(*ignore):evn_BTNPressed_OK)
+      btn_OK = tk.Button(top, text="OK", command=evn_BTNPressed_OK)
       btn_OK.grid(row=(j + 1), column=1)
     else:
       #The properties need to be edited
+      '''How this Works:
+          The user passes the names of all the widgets that must be added to the Properties fields.
+          Each widget is placed right next to the attribute it points to. Further, the widgets that utilize
+          the 'command' parameter can be given custom funtions to be passed to the command attribute.
+          All these functions are stored as objects in the 'commands'
+          tuple, passed to the initializer.
+      '''
+      self.dict_Entries = {} #An empty dictionary containing <attribute_name>:<Entry_widget>
+      j = 0
+      for i in attributes:
+        j += 1
+        tk.Label(top, text=i, anchor=tk.W).grid(row=j, column=0, sticky=tk.W)
+        tk.Label(top, text=" : ").grid(row=j, column=1)
+        #Process which command is to be added
+        if(tup_ControlsReq[j] == "Label"):
+          tk.Label(top, text=attributes[i]).grid(row=j, column=2)
+        elif (tup_ControlsReq[j] == "Entry"):
+          self.dict_Entries.update({i:tk.Entry(top, text=attributes[i])})
+        elif (tup_ControlsReq[j] == "Checkbox"):
+          #Code for adding a checkbox                             (TO DO)
+          
+      btn_OK = tk.Button(top, text="OK", command=evn_BTNPressed_OK)
+      btn_OK.grid(row=(j + 1), column=0)
+      btn_APPLY = tk.Button(top, text="Apply", command=evn_BTNPressed_APPLY)
+      btn_APPLY.grid(row=(j + 1), column=1)
+      btn_Cancel = tk.Button(top, text="Cancel", command=top.destroy)
+      btn_Cancel.grid(row=(j + 1), column=2)
       
-    
   def evn_BTNPressed_OK(self):
     self.top.destroy()
     
@@ -147,7 +173,7 @@ def evn_encryptButtonPressed():
   #fetch the password:
   global ENTRY_DIALOG_INPUT
   global ALMANAC_LOCATION
-  psswd = ENTRY_DIALOG_INPUT
+  psswd = ENTRY_DIALOG_INPUT[0]
   for i in CURR_FILE_SELECTION:
     if(i.endswith(".eny")):
       ret =decryptFile(os.getcwd() + CURR_FILE_SELECTION, psswd, ALMANAC_LOCATION)
