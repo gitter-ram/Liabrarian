@@ -24,11 +24,11 @@ class EntryDialog:
     
 #Some global dynamic constants: (CORE)
 SYSTEM_TYPE = (os.uname())[0]
-
+ALMANAC_LOCATION = ".alm"
 #Some Golobal variables shared between GUI Widgets and Core
 CURR_FILE_SELECTION = [] #A list of files currently selected by the user
 
-def encryptFile(file, passwd):
+def encryptFile(file):
   '''A basic complementary file encryption.'''
   try:
     if not (os.access((os.getcwd() + file), os.R_OK)):
@@ -141,3 +141,25 @@ def evn_encryptButtonPressed():
         messagebox.showerror("Error", error_str)
     else: #File has to be encrypted
       #Code for ordering a file encryption follows
+      #First, try to encrypt the file
+      ret = encryptFile(i)
+      if ret == 0: #Encryption successful, delete the source file and make an almanac entry
+        try:
+          if(os.access(ALMANAC_LOCATION, R_OK)):
+            messagebox.showerror("Error", "Encryption failed.No read privilage to the almanac.")
+            os.remove(i + ".eny")
+            continue
+          falm = open(ALMANAC_LOCATION, "a")
+          falm.write(i + ":" + i + ".eny" + "\n")
+        except (Exception)
+          messagebox.showerror("Error", "Errors occured during writing the almanac. Exiting")
+          os.remove(i + ".eny")
+          continue
+      if ret != 0: #Errors occrued
+        if (ret == -1):
+          error_str = "The File, " + i + " is unreadable. (No read privialge)"
+        if (ret == -2):
+          error_str = "Errors during reading or writing files while working with " + i
+        messagebox.showerror("Error", error_str)
+        os.remove(i+".eny")
+     messagebox.showinfo("Done", "All operations completed successfully.")
