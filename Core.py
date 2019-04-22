@@ -6,6 +6,7 @@ import tkinter as tk
 
 #Gui Specific, custom dialogs
 ENTRY_DIALOG_INPUT = []
+PROPERTIES_DIALOG_ATRRIBS = {}
 class EntryDialog:
   def __init__(self, parent, msg):
     self.top = tk.Toplevel(parent)
@@ -73,17 +74,31 @@ class PropertiesDialog:
       btn_APPLY.grid(row=(j + 1), column=1)
       btn_Cancel = tk.Button(top, text="Cancel", command=top.destroy)
       btn_Cancel.grid(row=(j + 1), column=2)
-      
+    #Copy the attributes to the global variable:
+    for i in attributes:
+      PROPERTIES_DIALOG_ATTRIB.update({i:atrributes[i]})
+    
   def evn_BTNPressed_OK(self):
     self.top.destroy()
-    
+  
+  def evn_BTNPressed_APPLY(self):
+    global PROPERTIES_DIALOG_ATTRIB
+    for i in self.dict_Entries:
+      PROPERTIES_DIALOG_ATTRIB.update({i:self.dict_Entries[i].get()})
+    j = 0
+    for i in self.dict_CheckBoxes:
+      PROPERTIES_DIALOG_ATTRIB.update({i:self.checkboxes[j]})
+      j += 1
+    #destroy:
+    self.top.destroy()
+
 #Some global dynamic constants: (CORE)
 SYSTEM_TYPE = (os.uname())[0]
 ALMANAC_LOCATION = ".alm"
 
 #Some Golobal variables shared between GUI Widgets and Core
 CURR_FILE_SELECTION = [] #A list of files currently selected by the user
-ENTRY_DIALOG_INPUT = "" #The input given by the user in the last input dialog
+ENTRY_DIALOG_INPUT = [] #The input given by the user in the last input dialog
 
 def encryptFile(file):
   '''A basic complementary file encryption.'''
