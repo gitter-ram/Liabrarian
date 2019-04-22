@@ -50,6 +50,8 @@ class PropertiesDialog:
           tuple, passed to the initializer.
       '''
       self.dict_Entries = {} #An empty dictionary containing <attribute_name>:<Entry_widget>
+      self.dict_CheckBoxes = {} #an empty dictionary like the one above
+      self.checkboxes = [] #state of all the checkboxes.
       j = 0
       for i in attributes:
         j += 1
@@ -62,7 +64,7 @@ class PropertiesDialog:
           self.dict_Entries.update({i:tk.Entry(top, text=attributes[i])})
         elif (tup_ControlsReq[j] == "Checkbox"):
           #Code for adding a checkbox                             (TO DO)
-          
+          self.dict_CheckBoxes.update({i:tk.Checkbutton(top, text=attributes[j], onvalue=True, offvalue=False, variable=checkboxes[j])
       btn_OK = tk.Button(top, text="OK", command=evn_BTNPressed_OK)
       btn_OK.grid(row=(j + 1), column=0)
       btn_APPLY = tk.Button(top, text="Apply", command=evn_BTNPressed_APPLY)
