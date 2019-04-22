@@ -235,3 +235,9 @@ def evn_encryptButtonPressed():
         messagebox.showerror("Error", error_str)
         os.remove(i+".eny")
      messagebox.showinfo("Done", "All operations completed successfully.")
+
+def showProperties(root):
+  '''This function shows the metadata about the files and also allows 
+     the user to change the file's attributes.'''
+  if len(CURR_FILE_SELECTION) != 1:
+    
