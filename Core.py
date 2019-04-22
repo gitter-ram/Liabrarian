@@ -62,9 +62,11 @@ class PropertiesDialog:
           tk.Label(top, text=attributes[i]).grid(row=j, column=2)
         elif (tup_ControlsReq[j] == "Entry"):
           self.dict_Entries.update({i:tk.Entry(top, text=attributes[i])})
+          self.dict_Entries[i].grid(row=j, column=2)
         elif (tup_ControlsReq[j] == "Checkbox"):
           #Code for adding a checkbox                             (TO DO)
-          self.dict_CheckBoxes.update({i:tk.Checkbutton(top, text=attributes[j], onvalue=True, offvalue=False, variable=checkboxes[j])
+          self.dict_CheckBoxes.update({i:tk.Checkbutton(top, text=attributes[j], onvalue=True, offvalue=False, variable=checkboxes[j])})
+          self.dict_CheckBoxes[i].grid(row=j, column=2)
       btn_OK = tk.Button(top, text="OK", command=evn_BTNPressed_OK)
       btn_OK.grid(row=(j + 1), column=0)
       btn_APPLY = tk.Button(top, text="Apply", command=evn_BTNPressed_APPLY)
