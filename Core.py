@@ -3,10 +3,13 @@ import os.*
 #GUI Specific imports
 from tkinter import messagebox
 import tkinter as tk
-
+import tkinter.tix as tx
 #Gui Specific, custom dialogs
-ENTRY_DIALOG_INPUT = []
 PROPERTIES_DIALOG_ATRRIBS = {}
+#Some Golobal variables shared between GUI Widgets and Core
+CURR_FILE_SELECTION = [] #A list of files currently selected by the user
+ENTRY_DIALOG_INPUT = [] #The input given by the user in the last input dialog
+
 class EntryDialog:
   def __init__(self, parent, msg):
     self.top = tk.Toplevel(parent)
@@ -92,13 +95,24 @@ class PropertiesDialog:
     #destroy:
     self.top.destroy()
 
+class ToolbarWidget:
+  def __init__(self, parent):
+    self.BTNArray = {} #<Name>:<Button Object>
+    self.IMGArray = {} #<Name>:<Image Object>
+    self.IMGName = {} #<Name>:<Image Name>
+    options = ("New Folder", "Delete", "Cut", "Copy",\
+               "Paste", "Rename", "Properties",\
+               "Settings", "Zip/Extraxt", "Encrypt",\
+               "Protect Access", "Run", "Run with arguments"\
+               "Add to Bookmarks", "Add to Favourites"\
+               "Open Terminal here", "Help", "Music Player",\
+               "Downloads", "Menu")
+    
+    
 #Some global dynamic constants: (CORE)
 SYSTEM_TYPE = (os.uname())[0]
 ALMANAC_LOCATION = ".alm"
 
-#Some Golobal variables shared between GUI Widgets and Core
-CURR_FILE_SELECTION = [] #A list of files currently selected by the user
-ENTRY_DIALOG_INPUT = [] #The input given by the user in the last input dialog
 
 def encryptFile(file):
   '''A basic complementary file encryption.'''
@@ -235,9 +249,3 @@ def evn_encryptButtonPressed():
         messagebox.showerror("Error", error_str)
         os.remove(i+".eny")
      messagebox.showinfo("Done", "All operations completed successfully.")
-
-def showProperties(root):
-  '''This function shows the metadata about the files and also allows 
-     the user to change the file's attributes.'''
-  if len(CURR_FILE_SELECTION) != 1:
-    
