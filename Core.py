@@ -95,19 +95,41 @@ class PropertiesDialog:
     #destroy:
     self.top.destroy()
 
-class ToolbarWidget:
-  def __init__(self, parent):
-    self.BTNArray = {} #<Name>:<Button Object>
-    self.IMGArray = {} #<Name>:<Image Object>
-    self.IMGName = {} #<Name>:<Image Name>
-    options = ("New Folder", "Delete", "Cut", "Copy",\
-               "Paste", "Rename", "Properties",\
-               "Settings", "Zip/Extraxt", "Encrypt",\
-               "Protect Access", "Run", "Run with arguments"\
-               "Add to Bookmarks", "Add to Favourites"\
-               "Open Terminal here", "Help", "Music Player",\
-               "Downloads", "Menu")
-    
+def initToolbar(parent):
+  global toolbar, commands
+  options = ("New Folder", "Delete", "Cut", "Copy",\
+             "Paste", "Rename", "Properties",\
+             "Settings", "Zip/Extraxt", "Encrypt",\
+             "Protect Access", "Run", "Run with arguments",\
+             "Add to Bookmarks", "Add to Favourites",\
+             "Open Terminal here", "Help", "Music Player",\
+             "Downloads", "Menu")
+    commands = (doNewFolder, doDelete, doCut, doCopy,\
+                doPaste, doRename, doProperties, doSettings,\
+                doCompress, doEncrypt, doAccessProtect,\
+                doRun, doRunWithArgs, doBookmarks,\
+                doFavourites, doTerminal, doHelp,\
+                doMP3, doDownload, doMenu)
+    assert len(options) == len(commands), "900 : Options and commands do not match!"
+    frm = tk.Frame(parent)
+    toolbar = tk.Frame(frm)
+    try:
+      alp = open("icons.dat", "r")
+    except (Exception):
+      print(Exception)
+    for i in range(0, len(options)):
+      #Initialize the toolbar
+      try:
+        a = alp.readline()
+        dicta = eval(a)
+        if(dicta.keys()[0] != options[i]):
+          return(-1)
+        image = tk.PhotoImage(file=dicta[(dicta.keys()[0])])
+        buttn = tk.Button(toolbar, image=image, command=commands[i])
+        buttn.grid(row=0, column=i)
+      except tk.TclError as tclerr:
+        print(tclerr)
+    toolbar.grid(row=0, column=0, sticky=tk.NW)
     
 #Some global dynamic constants: (CORE)
 SYSTEM_TYPE = (os.uname())[0]
