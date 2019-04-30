@@ -1,9 +1,9 @@
 import os.*
 
 #GUI Specific imports
-from tkinter import messagebox
 import tkinter as tk
 import tkinter.tix as tx
+import tkMessageBox
 #Gui Specific, custom dialogs
 PROPERTIES_DIALOG_ATRRIBS = {}
 #Some Golobal variables shared between GUI Widgets and Core
@@ -135,6 +135,51 @@ def initToolbar(parent):
 SYSTEM_TYPE = (os.uname())[0]
 ALMANAC_LOCATION = ".alm"
 
+#====GUI END=========Do-ers=========IMPLEMENTATION===========
+
+def doCopy():
+  global currClip, CURR_FILE_SELECTION
+  for i in CURR_FILE_SELECTION:
+    currClip.append(os.path.join(os.getcwd(), i))
+  
+def doPaste():
+  global currClip
+  cwd = os.getcwd()
+  errors = False
+  errornous = []
+  try:
+    for i in currClip:
+      #error checking:
+      if not os.access(i, os.R_OK):
+        errors = True
+        errornous.append("No permission to read the file: " + i)
+      if not os.access(cwd, os.W_OK):
+        errors = True
+        errornous.append("No permission to write to the folder: " + cwd)
+      #see if the selected file is a directory or not.
+      if os.path.isdir(i):
+        #start copying
+        shutil.copytree(i, cwd) #!Check the syntax
+        if (CUT_ENABLED):
+          shutil.rmtree(i)
+      else:
+        if not CUT_ENABLED:
+          shutil.copy(i, cwd)
+        if (CUT_ENABLED):
+          shutil.move(i, cwd)
+  except Error as err:
+    print(err)
+  if errors:
+    errorstr = "Errors occured during the pasting of:"
+    for i in errornous:
+      errorstr += ("\n\t" + i)
+    errorstr += "All other files were copied successfully."
+    tkMessageBox.showerror("Errors Occured during Paste", errorstr)
+  else:
+    tkMessageBox.showinfo("Successfully Pasted", "All Operations completed successfully.")
+def doCut():
+  doCopy()
+  CUT_ENABLED = True
 
 def encryptFile(file):
   '''A basic complementary file encryption.'''
