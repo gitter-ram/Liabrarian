@@ -169,6 +169,7 @@ def doPaste():
           shutil.move(i, cwd)
   except Error as err:
     print(err)
+  CUT_ENABLED = False
   if errors:
     errorstr = "Errors occured during the pasting of:"
     for i in errornous:
