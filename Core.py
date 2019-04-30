@@ -198,6 +198,22 @@ def doDelete():
   except Exception as expt:
     print(expt)
 
+def doTerminal():
+  #Open the terminal in the current directory
+  try:
+    tmp = open("temp_007.bat", "w")
+    #See if this is the correct drive
+    cwd = os.getcwd()
+    if not (cwd.startswith("C:")):
+      tmp.write(cwd[0:2] + "\n")
+    tmp.write("cd " + cwd)
+  except Exception as e:
+    print(e)
+  finally:
+    if not tmp:
+      tmp.close()
+  os.system("cmd \K " + os.path.join(cwd, "temp_007.bat"))
+
 #Encryption Module:
 
 def encryptFile(file):
