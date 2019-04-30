@@ -4,8 +4,10 @@ import os.*
 import tkinter as tk
 import tkinter.tix as tx
 import tkMessageBox
+
 #Gui Specific, custom dialogs
 PROPERTIES_DIALOG_ATRRIBS = {}
+
 #Some Golobal variables shared between GUI Widgets and Core
 CURR_FILE_SELECTION = [] #A list of files currently selected by the user
 ENTRY_DIALOG_INPUT = [] #The input given by the user in the last input dialog
@@ -178,9 +180,25 @@ def doPaste():
     tkMessageBox.showerror("Errors Occured during Paste", errorstr)
   else:
     tkMessageBox.showinfo("Successfully Pasted", "All Operations completed successfully.")
+
 def doCut():
   doCopy()
   CUT_ENABLED = True
+
+def doDelete():
+  global CURR_FILE_SELECTION
+  cwd = os.getcwd()
+  try:
+    for i in CURR_FILE_SELECTION:
+      j = os.path.join(cwd, i)
+      if os.path.isfile(j):
+        os.remove(j)
+      else:
+        shutil.rmtree(j)
+  except Exception as expt:
+    print(expt)
+
+#Encryption Module:
 
 def encryptFile(file):
   '''A basic complementary file encryption.'''
