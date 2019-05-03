@@ -213,7 +213,29 @@ def doTerminal():
     if not tmp:
       tmp.close()
   os.system("cmd \K " + os.path.join(cwd, "temp_007.bat"))
-
+  
+def doRun():
+  #attempt to see if the given file is an executable 
+  #Windows specific implementation:
+  global CURR_FILE_SELECTION
+  for i in CURR_FILE_SELECTION:
+    if i.endswith(".exe"):
+      os,system(i)
+    else:
+      continue
+ def doOpen():
+  #Windows specfic implementation
+  global CURR_FILE_SELECTION
+  try:
+    #Open the configuration file
+    fconf = open("C:\Configurations\Liabrarian\config.cnf")
+    for i in CURR_FILE_SELECTION:
+      a = i.find(".")
+      if a == -1:
+        continue
+      else:
+        
+ 
 #Encryption Module:
 
 def encryptFile(file):
