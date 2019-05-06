@@ -40,7 +40,21 @@ class FilePlayground:
     af.close()
     #place the icons
     self.grid = [(self.canv_width // (self.ICON_SIZE + self.ICON_SPACING)), (self.canv_height // (self.ICON_SIZE + self.ICON_SPACING))]
-    self.updateCanvas(items)
+    self.updateCanvas(items, nodelete=True)
   
-  def updateCanvas(items):
-    #
+  def updateCanvas(items, nodelete=False):
+    #Delete all the items on the canvas first:
+    if not nodelete:
+      self.canv.delete(self.objectsDrawn) #objectsdrawn is a list of all the objects that were drawn.
+    #Start drawing the objects
+    j = 0
+    TEXT_ICON_SPACE = 5
+    NUM_COLUMNS = self.parent.winfo_width() // (self.ICON_SIZE + (2 * self.ICON_SPACING))
+    NUM_ROWS = self.parent.winfo_height() // (self.ICON_SIZE + (2 * self.ICON_SPACING))
+    for i in range(0, NUM_ROWS):
+      for j in range(0, NUM_COLUMNS):
+        x = (j * (self.ICON_SIZE + self.ICON_SPACING))
+        y = (i * (self.ICON_SIZE + self.ICON_SPACING))
+        alpha = i * NUM_COLUMNS + j
+        #Find the appropriate icon
+        
