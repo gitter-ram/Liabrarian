@@ -5,8 +5,8 @@ class FilePlayground:
   CURR_ICON_SIZE = 32
   def __init__(parent, height, width, items, iconsize=32, configdir="C:\\Program Settings\\Liabrarian\\"):
     #First, initialize the canvas and some icons
-    ICON_IMG = []
-    CURR_ICON_SIZE = iconsize
+    self.ICON_IMG = {}
+    self.CURR_ICON_SIZE = iconsize
     self.canv = tk.Canvas(master, width=width, height=height)
     self.canv.pack()
     #add the icons and their discriptions
@@ -19,6 +19,28 @@ class FilePlayground:
           ICON = os.path.join(configdir, ("\\icons\\current theme\\" + i + ".gif"))
         else:
           ICON = os.path.join(configdir, ("\\icons\\current theme\\" + i[(i.find('.') + 1):] + ".gif"))
-      ICON_IMG.append(tk.PhotoImage(file=ICON))
+      ICON_IMG.update({i:tk.PhotoImage(file=ICON)})
     #start rendering the canvas:
     #get the height and the width of the parent
+    tk.update()
+    canv_height = self.canv.winfo_height
+    canv_width = self.canv.winfo_width
+    #Read the settings file
+    af = open(os.path.join(configdir, "settings.cnf"), "r")
+    #start reading:
+    while (a = af.readline()) != "":
+      if(a == "</Display>"):
+        break
+      if(a == "<Display>"):
+        flag = True
+      if flag:
+        if ((a.trim())[0:(a.trim().find(':'))]) == "SpaceBetweenIcons":
+          self.ICON_SPACING = int((a.trim())[(a.trim().find(':')+1):])
+          break
+    af.close()
+    #place the icons
+    self.grid = [(self.canv_width // (self.ICON_SIZE + self.ICON_SPACING)), (self.canv_height // (self.ICON_SIZE + self.ICON_SPACING))]
+    self.updateCanvas(items)
+  
+  def updateCanvas(items):
+    #
